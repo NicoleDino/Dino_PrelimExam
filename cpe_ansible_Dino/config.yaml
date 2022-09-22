@@ -1,0 +1,46 @@
+---
+- hosts: all
+  become: true
+  tasks:
+
+  - name: Install latest python3 and pip3 ||
+          echo "alias python=/user/bin/python3"
+          echo "alias pip=/home/nicole_dino/.local/bin/pip3" ||
+    package:
+      name:
+        - "{{ python }}"
+        - "{{ pip }}"
+      state: latest
+      update_cache: yes
+
+  - name: Install Java open-jdk (Ubuntu)
+    apt:
+      name:
+        - default-jre
+        - default-jdk
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Install Java open-jdk (CentOS)
+    dnf:
+      name:
+        - java-11-openjdk-devel
+        - java-11-openjdk
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - shell: echo 'nicole_dino'
+    register: username
+  - debug: msg="Ansible Ubuntu Managed node by {{ username.stdout }}"
+    when: ansible_distribution == "Ubuntu"
+
+  - shell: echo 'ndino'
+    register: username2
+  - debug: msg="Ansible CentOS Managed node by {{ username2.stdout }}"
+    when: ansible_distribution == "CentOS"
+
+  - shell: echo 'Nicole Rosae Dino'
+    register: myName
+  - debug: msg="Hello! I am {{ myName.stdout }}, the creator of this playbook"

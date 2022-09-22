@@ -1,0 +1,4 @@
+[remote_servers]
+
+nicole_dino@192.168.56.104 python=python3 pip=python3-pip 
+ndino@192.168.56.107 python=python3 pip=python3-pip
